@@ -5,27 +5,165 @@ Emacs24.3, MacOS 10.9.5
 
 homeway.xue@gmail.com, 2014年9月25日
 
-安装问题
+环境配置
 --------
+Emacs启动时会寻找主目录的~/.emacs配置文件，大部分插件都需要在此文件中配置。
+
+###基本定制
+    ;; 去掉菜单
+    (menu-bar-mode -1)
+    ;; 显示代码的行号
+	;; 若需要临时显示，可使用M-x linum-mode 切换
+    (global-linum-mode 1)
+
+###包管理器安装
+	;;启用包管理
+    (require 'package)
+    (add-to-list 'package-archives
+	             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+    (package-initialize)
+####更新包内容
+`M-x package-refresh-contents RET`
+
+###安装solarized主题
+参考[github/emacs-color-theme-solarized](https://github.com/sellout/emacs-color-theme-solarized)
+
+将emacs-color-theme-solarized目录加入到Emacs的custom-theme-load-path，或从包管理器安装：
+
+    package-install color-theme-solarized
+
+再将下面一行增加到初始化文件中：
+
+    (load-theme 'solarized-[light|dark] t)
+
+重新加载初始化文件，或重启Emacs。
+
+###magit
+####安装
+参考[github/magit](https://github.com/magit/magit)或[magit手册](http://magit.github.io/master/magit.html)。
+
+M-x package-install 安装命令：`M-x package-install RET magit RET`
+
+* M-x magit-status - 执行`git status`并进入magit操作主界面（配合`projectile`可以使用快捷键`C-c p v`）
+*  q               - 退出
+*  s               - stage
+*  i               - ignore
+*  l               - 进入日志选项
+*  c               - 进入commit选项
+*    C-c C-c       - 提交
+
+###Erlang模式
+[Erlang模式](http://www.erlang.org/doc/apps/tools/erlang_mode_chapter.html)内置于OTP发行版中。
+命令`M-x erlang-mode RET`可将当前缓冲区切换为Erlang主模式。
+正确安装erlang模式后，编辑.erl或.hrl文档时会自动切换到该主模式。
+
+详细的配置说明在[erlang模式手册](http://www.erlang.org/doc/man/erlang.el.html)。
+
+####安装和配置
+	;; erlang模式
+	;; 设置自动模板中的邮箱
+	(setq user-mail-address "homeway.xue@gmail.com")
+	(setq load-path (cons "~/erlang/erts/r17/lib/tools-2.6.14/emacs/" load-path))
+	(setq erlang-root-dir "~/erlang/erts/r17")
+	(setq exec-path (cons "~/erlang/erts/r17/bin/" exec-path))
+	;; 一个不错的初始化配置
+	(require 'erlang-start) 
+
+这个配置中使用的erlang是通过kerl配置的，通过kerl编译并安装了erlang之后，在shell启动文件中增加了如下配置行：
+
+	# start erlang with kerl
+	. /Users/homeway/erlang/erts/r17/activate                                             
+####注释
+* C-c C-c 将标记区域注释
+* C-u 3 C-c C-c 使用%%%标记注释
+* C-c C-u 取消注释
+
+####编辑函数子句
+* C-c C-j 生成新的函数子句
+* C-c C-y 拷贝函数子句的参数
+
+####模板
+命令系列：`tempo...`
+
+* 简单模板 - If, Case, Receive, Receive After, Receive Loop
+* 源文件头 - Module, Author, Small Header, Normal Header, Large Header
+* Small Server - 不带OTP的Server模板
+* Application - OTP application
+* Supervisor - OTP supervisor
+* Superbisor Brigge - OTP supervisor bridge
+* gen_server - OTP gen_server
+* gen_event - OTP gen_event
+* gen_fsm - OTP gen_fsm
+* Library模块 - 不实现进程的模块
+* Corba回调 - Corba回调模块
+* Erlang test suite - OTP测试模块生成
+
+####Shell
+    erlang-shell - 启动新的shell
+    C-c C-z      - 显示Erlang shell（如果不存在就新建一个）
+    C-up/M-p     - 历史中上一个命令
+    C-down/M-n   - 历史中下一个命令
+
+默认的shell启动后并没有增加必要的启动选项，因此需要手工补充。
+常见的内容包括：
+
+* 需要使用`code:add:path`命令添加的路径，如：
+* 需要手工启动的applicationerlang-shell附件选项的手工添加方法：
+	
+####编译
+    C-c C-k      - 编译当前缓冲区中的模块
+    C-c C-l      - 显示编译结果（并进入结果所在窗口）
+    C-u C-x`     - 开始从头解析编译结果，并移至第一个出错行
+    C-x`         - 移动到下一个出错行
+
+###dired-detail
+为了避免dired显示太多内容，可以使用[dired-details](http://www.emacswiki.org/emacs/dired-details.el)插件。
+
+####配置
+    ;;prevent dired too much info
+    (add-to-list 'load-path "~/.emacs.d/dired-details")
+    (require 'dired-details)
+    (dired-details-install) 
+
+####临时切换
+    ;;   ) - dired-details-show
+    ;;   ( - dired-details-hide
+
+###projectle
+通过projectle的配置，可以在git项目中做深层文件查找，项目文件目录比较复杂时仍可得心应手。
+配合安装以下包可以更进一步：
+
+* helm-projectile 快速切换项目等
+* ido 简化文件名搜索
+* recentf 列举最近访问过的文件（内置的包）
+
+####安装
+参见[github上的projectile项目](https://github.com/bbatsov/projectile)。
+
+* C-c p C-h   查看帮助：列举projectile命令
+* C-c p f     查看项目中的文件
+* C-c p d     打开单个目录
+* C-c p D     打开目录列表（配合dired-detail可以切换长显示和短显示）
+* C-c p !     在项目根目录执行shell命令
+* C-c p v     `vc-dir`指令，如果是git则自动执行`magit-status`
 
 基础概念
 --------
 ###文件缓冲区
 虽然缓冲区看起来和文件非常相像，但它只是一个临时性的工作区域，里面可能包含的是文件的一份副本。
 
-###编辑模式
 ###插入点
-###窗口
+光标前的位置就是插入点。
+
 ###删除环
-###默认快捷键
+被某些命令（`C-k`等）删除的文本将进入删除环，以供`C-y`或`M-y`粘贴操作使用。
+
+###默认快捷键约定
 * 最常用的命令，C-{n}
 * 次常用的命令，M-{n}
 * 其他常用命令，C-x {something} RETURN
 * 特殊命令，    C-c {something} RETURN
 * 全命令执行，  M-x {long-command-name} RETURN
-
-#递增查找
-#递归查找
 
 基本命令
 --------
@@ -125,12 +263,13 @@ homeway.xue@gmail.com, 2014年9月25日
 * C-t     transpose-chars
 * M-t     transpose-words
 * C-x C-t transpose-lines
-* M-c     capitalize-word
-* M-u     upcase-word
-* M-l     downcase-word
+* M-c     capitalize-word 切换首字母为大写
+* M-u     upcase-word     转换为大写
+* M-l     downcase-word   转换为小写
 * C-x u   undo
 *         revert-buffer 撤销上次存盘之后的所有修改
 * C-x ESC ESC 重复执行上一次复杂命令
+* C-q <tab> 输入Tab键（C-q后面的键盘输入会作为原始输入）
 
 递增查找命令
 -----------
@@ -173,6 +312,7 @@ homeway.xue@gmail.com, 2014年9月25日
 缓冲区命令
 ---------
 * C-x b    switch-to-buffer
+* C-x C-b  list-buffer
 *  d       待删标记
 *  s       待存标记
 *  u       去除操作标记
@@ -180,7 +320,6 @@ homeway.xue@gmail.com, 2014年9月25日
 *  f       窗口内打开缓冲区内容
 *  o       在新窗口打开缓冲区内容
 *  q       退出
-* C-x C-b  list-buffer
 * C-x k    kill-buffer
 *          rename-buffer
 * C-x left/right  切换缓冲区
