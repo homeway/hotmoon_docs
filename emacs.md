@@ -5,6 +5,24 @@ Emacs24.3, MacOS 10.9.5
 
 homeway.xue@gmail.com, 2014年9月25日
 
+* [环境配置](#环境配置)
+* [基础概念](#基础概念)
+* [基本命令](#基本命令)
+* [副模式命令](#副模式命令)
+* [文件操作命令](#文件操作命令)
+* [光标移动命令](#光标移动命令)
+* [文本删除命令](#文本删除命令)
+* [文本块常用操作步骤](#文本块常用操作步骤)
+* [文本块操作命令](#文本块操作命令)
+* [段落重排](#段落重排)
+* [编辑技巧](#编辑技巧)
+* [递增查找命令](#递增查找命令)
+* [查找－替换操作](#查找－替换操作)
+* [窗口命令](#窗口命令)
+* [缓冲区命令](#缓冲区命令)
+* [书签](#书签)
+* [Shell交互](#Shell交互)
+
 环境配置
 --------
 Emacs启动时会寻找主目录的~/.emacs配置文件，大部分插件都需要在此文件中配置。
@@ -39,12 +57,12 @@ Emacs启动时会寻找主目录的~/.emacs配置文件，大部分插件都需�
 重新加载初始化文件，或重启Emacs。
 
 ###magit
-####安装
 参考[github/magit](https://github.com/magit/magit)或[magit手册](http://magit.github.io/master/magit.html)。
 
 M-x package-install 安装命令：`M-x package-install RET magit RET`
 
 * M-x magit-status - 执行`git status`并进入magit操作主界面（配合`projectile`可以使用快捷键`C-c p v`）
+*  ?               - 帮助
 *  q               - 退出
 *  s               - stage
 *  i               - ignore
