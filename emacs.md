@@ -91,6 +91,7 @@ M-x package-install 安装命令：`M-x package-install RET magit RET`
 
 	# start erlang with kerl
 	. /Users/homeway/erlang/erts/r17/activate                                             
+
 ####注释
 * C-c C-c 将标记区域注释
 * C-u 3 C-c C-c 使用%%%标记注释
